@@ -1,0 +1,26 @@
+#! python3
+# im_feeling_lucky.py - Open several google search results
+
+# gets search keywords from the command line arguement / clipboard
+# retrieves search results page
+# read command line from sys.argv
+# fetch the search page with the requests module
+# find the links to each search result
+# call the wwebbrowser.open() function to open the webbrowser
+
+import requests, sys, webbrowser, bs4, pyperclip
+
+print('Googling...')                                                                    # display text while downloading the Google page
+pyperclip.copy('WWE')
+if len(sys.argv) > 1:
+    search = ' '.join(sys.argv[1:])
+else:
+    search = pyperclip.paste()
+res = requests.get("http://google.com/search?q=" + ' '.join(search))                    # request the website
+print(res.raise_for_status())                                                           # did it work?
+
+soup = bs4.BeautifulSoup(res.text, features="lxml")                                     # retrieve top search result links
+linkElems = soup.select('div#main > div > div > div > a')                               # this parses through the HTML divisions and classes
+numOpen = min(5, len(linkElems))                                                        # counts to a maximum of 5
+for i in range(numOpen):
+    webbrowser.open('http://google.com/' + linkElems[i].get('href'))                    # opens tabs equal to numOpen (5)
