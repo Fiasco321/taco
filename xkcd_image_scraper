@@ -1,0 +1,34 @@
+#! python3
+# xkcd_download.py
+
+# Loads the XKCD webpage
+# Saves the comic image on taht page
+# Follows the Previous Comic link
+# Repeats until it reaches the first comic
+
+import requests, bs4, os
+url = "http://xkcd.com"                                                                 # starting url
+os.makedirs('xkcd', exist_ok=True)                                                      # store xkcd comics in ./xkcd, this makes the directory xkcd
+while not url.endswith('#'):
+    print('Downloading Page %s...' % url)                                               # prints what page we are downloading
+    res = requests.get(url)                                                             # calls url
+    res.raise_for_status()                                                              # did the download work? if yes, ends the program
+
+    soup = bs4.BeautifulSoup(res.text, features="lxml")                                                  # parses the HTML of the res(ource) and creates a beautifulsoup object
+    comicElem = soup.select('#comic img')                                               # <img> element from HTML holds the images, id attribute is comic
+    if comicElem == []:
+        print('Could not find comic image.')
+    else:
+        comicUrl = 'http:' + comicElem[0].get('src')                                    # creates a list that will hold one <img> element
+        print('Downloading image %s...' % comicUrl)                                   # states which is being downloaded
+        res = requests.get(comicUrl)                                                    # requests the url of the comic
+        res.raise_for_status()                                                          # did the download work? if yes, ends the program
+        imageFile = open(os.path.join('xkcd', os.path.basename(comicUrl)), 'wb')        # creates the file name from the XKCD titles (wb is write binary)
+        for chunk in res.iter_content(100000):                                          # returns chunks of 100000 bytes
+            imageFile.write(chunk)                                                      # writes the content to the file
+        imageFile.close()                                                               # closes the file
+
+    prevLink = soup.select('a[rel="prev"]')[0]                                          # identifies the <a> element with the rel attribute set to prev
+    url = 'http://xkcd.com' + prevLink.get('href')                                      # uses href to get previous comic's URL, which is now stored in url
+
+print('Done')
