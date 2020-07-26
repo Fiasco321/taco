@@ -1,0 +1,9 @@
+#! python3
+# selenium_click_buttons.py
+
+from selenium import webdriver                                                                              # import webdriver from selenium package
+browser = webdriver.Chrome(executable_path = 'C://Users/Brian/PycharmProjects/Selenium/chromedriver')       # defines the path tot he chromedriver executable
+browser.get('http://inventwithpython.com')                                                                  # opens webpage
+linkElem = browser.find_element_by_link_text('Blog')                                                        # finds link text element
+print(type(linkElem))
+linkElem.click()                                                                                            # follows "Blog" link
