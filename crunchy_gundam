@@ -1,7 +1,6 @@
 #! python 3
 # crunchy_gundam - opens the latest episode of Mobile Suit Gundam Wing on CrunchyRoll
 
-# open browser
 from selenium import webdriver                                                                              # import webdriver from selenium package
 browser = webdriver.Chrome(executable_path='C://Users/Brian/PycharmProjects/Selenium/chromedriver')         # defines the path tot he chromedriver executable
 browser.get('https://www.crunchyroll.com/login')                                                            # opens webpage
