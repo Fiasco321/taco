@@ -1,0 +1,9 @@
+!# python3
+# tick_tock.py
+
+import time             # import time module
+for i in range(3):      # set number of ticks and tocks
+    print('Tick')       
+    time.sleep(1)       # wait 1 s 
+    print('Tock')
+    time.sleep(1)       # wait 1 s
